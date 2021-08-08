@@ -1,0 +1,186 @@
+- hosts: all
+  become: yes
+  become_method: sudo
+  tasks:
+
+    - name: download minikube version {{ minikube_version }} deb
+      get_url:
+        url: https://github.com/kubernetes/minikube/releases/download/v{{ minikube_version }}/minikube_{{ minikube_version }}-0_amd64.deb
+        dest: /var/tmp/minikube_{{ minikube_version }}-0_amd64.deb
+        mode: '0644'
+
+    - name: install minikube version {{ minikube_version }} deb
+      apt:
+        deb: /var/tmp/minikube_{{ minikube_version }}-0_amd64.deb
+
+    - name: delete minikube version {{ minikube_version }} deb
+      file:
+        path: /var/tmp/minikube_{{ minikube_version }}-0_amd64.deb
+        state: absent
+
+    - name: add docker ubuntu apt key to system
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: add docker repository
+      apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+        state: present
+
+    - name: install docker-ce version {{ docker_version }} and conntrack
+      apt:
+        pkg:
+          - containerd.io
+          - docker-ce={{ docker_version }}
+          - docker-ce-cli={{ docker_version }}
+          - conntrack
+        state: present
+        update_cache: true
+
+    - name: start and enable docker service
+      service:
+        name: docker
+        enabled: yes
+        state: started
+
+    - name: add vagrant user to docker group
+      user:
+        name: vagrant
+        groups: docker
+        append: yes
+
+    - name: set bridge-nf-call-iptables = 1
+      lineinfile:
+        path: /etc/sysctl.conf
+        line: net.bridge.bridge-nf-call-iptables = 1
+
+    - name: apply sysctl config
+      shell: sysctl -p
+
+    - name: start minikube
+      shell: minikube start --vm-driver=none
+
+    - name: add service-node-port-range parameter to minikube config file
+      lineinfile:
+        state: present
+        path: /etc/kubernetes/manifests/kube-apiserver.yaml
+        line: '    - --service-node-port-range=1024-65535'
+        insertafter: '^.*service-account-key-file.*$'
+
+    - name: start and enable kubelet service
+      service:
+        name: kubelet
+        enabled: yes
+        state: started
+    
+    - name: create dir /home/vagrant/bin
+      file:
+        path: /home/vagrant/bin
+        state: directory
+
+    - name: add Google ubuntu apt key to system
+      apt_key:
+        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+        state: present
+
+    - name: add kubernetes repository
+      apt_repository:
+        repo: "deb [arch=amd64] https://apt.kubernetes.io/ kubernetes-xenial main"
+        state: present
+
+    - name: install kubectl version {{ kubectl_version }}
+      apt:
+        pkg: kubectl={{ kubectl_version }}
+        update_cache: yes
+        state: present
+
+    - name: copy kubectl conf
+      copy:
+        src: /root/.kube
+        dest: /home/vagrant/
+        remote_src: yes
+        owner: vagrant
+        group: vagrant
+
+    - name: fix kubectl conf
+      replace:
+        path: /home/vagrant/.kube/config
+        regexp: '/root'
+        replace: '/home/vagrant'
+
+    - name: enable kubectl autocompletion
+      lineinfile:
+        path: /home/vagrant/.bashrc
+        line: source <(kubectl completion bash)
+        insertafter: EOF
+
+    - name: enable kubectl alias k
+      lineinfile:
+        path: /home/vagrant/.bashrc
+        line: alias k="kubectl"
+        insertafter: EOF
+
+    - name: enable kubectl alias kc
+      lineinfile:
+        path: /home/vagrant/.bashrc
+        line: alias kc="kubectl"
+        insertafter: EOF
+
+    - name: copy minikube conf
+      copy:
+        src: /root/.minikube
+        dest: /home/vagrant/
+        remote_src: yes
+        owner: vagrant
+        group: vagrant
+
+    - name: download helm version {{ helm_version }}
+      get_url:
+        url: https://get.helm.sh/helm-v{{ helm_version }}-linux-amd64.tar.gz
+        dest: /var/tmp/helm-v{{ helm_version }}-linux-amd64.tar.gz
+        mode: 0755
+
+    - name: extract helm version {{ helm_version }}
+      unarchive:
+        src: /var/tmp/helm-v{{ helm_version }}-linux-amd64.tar.gz
+        remote_src: yes
+        dest: /home/vagrant/bin
+        extra_opts:
+          - "linux-amd64/helm"
+          - "--strip-components=1"
+        mode: 0755
+
+    - name: delete downloaded helm version {{ helm_version }} installer
+      file:
+        path: /var/tmp/helm-v{{ helm_version }}-linux-amd64.tar.gz
+        state: absent
+
+    - name: change helm executable ownership to vagrant
+      file:
+        path: /home/vagrant/bin/helm
+        mode: 0755
+        owner: vagrant
+        group: vagrant
+      
+    - name: download kubetail version {{ kubetail_version }}
+      get_url:
+        url: https://codeload.github.com/johanhaleby/kubetail/tar.gz/{{ kubetail_version }}
+        dest: /var/tmp/kubetail-{{ kubetail_version }}.tar.gz
+
+    - name: extract kubetail
+      unarchive:
+        src: /var/tmp/kubetail-{{ kubetail_version }}.tar.gz
+        dest: /opt
+        remote_src: yes
+
+    - name: install kubetail version {{ kubetail_version }}
+      file:
+        src: /opt/kubetail-{{ kubetail_version }}/kubetail
+        dest: /usr/bin/kubetail
+        state: link
+
+    - name: delete kubetail version {{ kubetail_version }} installer
+      file:
+        path: /var/tmp/kubetail-{{ kubetail_version }}.tar.gz
+        state: absent
