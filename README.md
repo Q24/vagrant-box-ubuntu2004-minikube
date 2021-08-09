@@ -62,6 +62,18 @@ config.vm.provision :ansible_local do |ansible|
 end
 ```
 
+If you wish to do provisioning on every box boot, you can use Ansible for that too:
+
+```
+# Provision using Ansible on every boot, using the pre-installed Ansible in the base box
+config.vm.provision 'ansible', run: 'always', type: :ansible_local do |ansible|
+    ansible.playbook = "on-boot-playbook.yml"
+    ansible.install = false
+    ansible.compatibility_mode = "2.0"
+    ansible.become = true # This can be true or false, whether or not you need to do stuff as root
+end
+```
+
 ## Changelog
 You can find the changelog [here](CHANGELOG.md).
 
