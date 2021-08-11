@@ -3,12 +3,12 @@
 set -e
 
 # Set version info
-export BOX_VERSION_BASE="0.8.0"
+export BOX_VERSION_BASE="1.0.0"
 
 # Set versions requested of main components (These will be used in Packer and passed to Ansible downstream)
 # The apt package versions can be determined with "apt-get madison <package name>", use the exact version number!
 export BOX_BASE="ilionx/ubuntu2004"
-export BOX_BASE_VERSION="0.8.0-20210808"
+export BOX_BASE_VERSION="1.0.0-20210811"
 export MINIKUBE_VERSION="1.22.0"
 export DOCKER_VERSION="5:20.10.8~3-0~ubuntu-focal"
 export KUBECTL_VERSION="1.22.0-00"
