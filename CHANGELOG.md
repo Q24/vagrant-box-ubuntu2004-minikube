@@ -1,5 +1,9 @@
 ## Changelog
 
+### 1.1.0-20210902
+* Updated to ilionx/ubuntu2004 base box version 1.1.0-20210902 (with Ubuntu 20.04.3)
+* Updated kubectl to version 1.22.1
+
 ### 1.0.0-20210811
 * First release of this box, based on ilionx/ubuntu2004 version 1.0.0-20210811
 * minikube: 1.22.0
