@@ -1,5 +1,14 @@
 ## Changelog
 
+### 1.1.2-20211122
+* Updated to ilionx/ubuntu2004 base box version 1.1.2-20211122 (with Ansible 4.8.0)
+* Updated minikube to version 1.24.0
+* Updated Docker to version 5:20.10.11~3-0~ubuntu-focal
+* Updated kubectl to version 1.22.4
+* Updated helm to version 3.7.1
+* Updated packer dependency to version 1.7.8
+* Updated vagrant dependency to version 2.2.19
+
 ### 1.1.1-20211006
 * Updated to ilionx/ubuntu2004 base box version 1.1.1-20211006 (with Ansible 4.6.0)
 * Updated minikube to version 1.23.2
