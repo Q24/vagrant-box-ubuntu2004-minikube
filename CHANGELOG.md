@@ -1,4 +1,11 @@
 ## Changelog
+### 1.2.0-20220125
+* Add [kubelogs](https://gitlab.com/mrvantage/kubelogs/) tool 
+* Updated to ilionx/ubuntu2004 base box version 1.1.3-20220125 (with Ansible 5.2.0)
+* Updated minikube to version 1.25.1
+* Updated Docker to version 5:20.10.12~3-0~ubuntu-focal
+* Updated kubectl to version 1.23.2
+* Updated helm to version 3.8.0
 
 ### 1.1.2-20211122
 * Updated to ilionx/ubuntu2004 base box version 1.1.2-20211122 (with Ansible 4.8.0)

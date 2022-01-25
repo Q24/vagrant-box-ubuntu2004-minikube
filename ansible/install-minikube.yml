@@ -183,3 +183,30 @@
       ansible.builtin.file:
         path: /var/tmp/kubetail-{{ kubetail_version }}.tar.gz
         state: absent
+
+    - name: create dir /opt/kubelogs
+      ansible.builtin.file:
+        path: /opt/kubelogs
+        state: directory
+
+    - name: download kubelogs version {{ kubelogs_version }}
+      ansible.builtin.get_url:
+        url: https://gitlab.com/api/v4/projects/25692176/packages/generic/kubelogs_linux_amd64/v{{ kubelogs_version }}/kubelogs_v{{ kubelogs_version }}_linux_amd64.tgz
+        dest: /var/tmp/kubelogs_v{{ kubelogs_version }}_linux_amd64.tgz
+
+    - name: extract kubelogs
+      ansible.builtin.unarchive:
+        src: /var/tmp/kubelogs_v{{ kubelogs_version }}_linux_amd64.tgz
+        dest: /opt/kubelogs
+        remote_src: yes
+
+    - name: install kubelogs version {{ kubelogs_version }}
+      ansible.builtin.file:
+        src: /opt/kubelogs/kubelogs
+        dest: /usr/bin/kubelogs
+        state: link
+
+    - name: delete kubelogs version {{ kubelogs_version }} installer
+      ansible.builtin.file:
+        path: /var/tmp/kubelogs_v{{ kubelogs_version }}_linux_amd64.tgz
+        state: absent

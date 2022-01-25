@@ -7,6 +7,7 @@
     "kubectl_version": "{{ env `KUBECTL_VERSION` }}",
     "helm_version": "{{ env `HELM_VERSION` }}",
     "kubetail_version": "{{ env `KUBETAIL_VERSION` }}",
+    "kubelogs_version": "{{ env `KUBELOGS_VERSION` }}",
     "vagrant_cloud_user": "{{ env `VAGRANT_CLOUD_USER` }}",
     "vagrant_cloud_box_user": "{{ env `VAGRANT_CLOUD_BOX_USER` }}",
     "vagrant_cloud_box_name": "{{ env `VAGRANT_CLOUD_BOX_NAME` }}",
