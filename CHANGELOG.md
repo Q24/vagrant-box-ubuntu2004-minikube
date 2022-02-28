@@ -1,4 +1,12 @@
 ## Changelog
+### 1.2.1-20220228
+* Updated to ilionx/ubuntu2004 base box version 1.1.5-20220228 (with Ubuntu 20.04.4 and Ansible 5.4.0)
+* Updated minikube to version 1.25.2
+* Updated kubectl to version 1.23.4
+* Updated virtualbox dependency to version 6.1.32
+* Updated packer dependency to version 1.7.10
+* Zeroed out the file system at the end of the build, to reduce the size of the virtual disk after compression
+
 ### 1.2.0-20220125
 * Add [kubelogs](https://gitlab.com/mrvantage/kubelogs/) tool 
 * Updated to ilionx/ubuntu2004 base box version 1.1.3-20220125 (with Ansible 5.2.0)
