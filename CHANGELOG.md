@@ -1,4 +1,15 @@
 ## Changelog
+### 1.2.3-20220503
+* Updated to ilionx/ubuntu2004 base box version 1.1.6-20220503 (with Ansible 5.7.0)
+* Updated docker to version 5:20.10.14~3-0~ubuntu-focal
+* Updated kubectl to version 1.23.6-00
+* Updated helm to version 3.8.2
+* Updated virtualbox dependency to version 6.1.34
+* Updated packer dependency to version 1.8.0
+
+### 1.2.2-20220415
+* Unreleased internal testing version
+
 ### 1.2.1-20220228
 * Updated to ilionx/ubuntu2004 base box version 1.1.5-20220228 (with Ubuntu 20.04.4 and Ansible 5.4.0)
 * Updated minikube to version 1.25.2
