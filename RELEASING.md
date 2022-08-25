@@ -11,6 +11,8 @@ Check [README.md](README.md) to install all necessary tools and configurations t
 * Update `BOX_VERSION_BASE` to a new version, use the semantic versioning scheme.
 * Check if there is a new [base box](https://github.com/Q24/vagrant-box-ubuntu2004) release, if so update `BOX_BASE_VERSION`.
 * Check if there is a new [Minikube](https://github.com/kubernetes/minikube/releases) release, if so update `MINIKUBE_VERSION`
+* Check if there is a new [cri-dockerd](https://github.com/Mirantis/cri-dockerd/releases) release, if so update `CRIDOCKERD_VERSION`
+* Check if there is a new [cri-tools](https://github.com/kubernetes-sigs/cri-tools/releases) release using `apt list -a cri-tools`, if so update `CRITOOLS_VERSION`.
 * Check if there is a new [Docker](https://docs.docker.com/engine/release-notes/) release using `apt list -a docker-ce`, if so update `DOCKER_VERSION`.
 * Check if there is a new [kubectl](https://github.com/kubernetes/kubernetes/releases) release using `apt list -a kubectl`, if so update `KUBECTL_VERSION`.
 * Check if there is a new [Helm](https://github.com/helm/helm/releases) release, if so update `HELM_VERSION`.

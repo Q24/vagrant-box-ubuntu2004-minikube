@@ -1,4 +1,15 @@
 ## Changelog
+
+### 1.2.4-20220825
+* Updated to ilionx/ubuntu2004 base box version 1.1.7-20220825 (with Ansible 6.3.0)
+* Updated minikube to version 1.26.1
+* Installed cri-dockerd version 0.2.5 (required by minikube)
+* Installed cri-tools version 1.24.2-00 (required by minikube)
+* Updated Docker to version 20.10.17
+* Updated kubectl to version 1.25.0
+* Updated Helm to version 3.9.4
+* Updated build dependencies: VirtualBox (6.1.36r152435), Packer (1.8.3), Vagrant (2.3.0)
+* 
 ### 1.2.3-20220503
 * Updated to ilionx/ubuntu2004 base box version 1.1.6-20220503 (with Ansible 5.7.0)
 * Updated docker to version 5:20.10.14~3-0~ubuntu-focal

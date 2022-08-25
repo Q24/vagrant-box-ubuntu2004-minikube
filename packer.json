@@ -3,6 +3,8 @@
     "box_base": "{{ env `BOX_BASE` }}",
     "box_base_version": "{{ env `BOX_BASE_VERSION` }}",
     "minikube_version": "{{ env `MINIKUBE_VERSION` }}",
+    "cridockerd_version": "{{ env `CRIDOCKERD_VERSION` }}",
+    "critools_version": "{{ env `CRITOOLS_VERSION` }}",
     "docker_version": "{{ env `DOCKER_VERSION` }}",
     "kubectl_version": "{{ env `KUBECTL_VERSION` }}",
     "helm_version": "{{ env `HELM_VERSION` }}",
@@ -33,7 +35,7 @@
       "type": "ansible-local",
       "playbook_file": "ansible/install-minikube.yml",
       "extra_arguments": [
-        "--extra-vars \"minikube_version={{user `minikube_version`}} docker_version={{user `docker_version`}} kubectl_version={{user `kubectl_version`}} helm_version={{user `helm_version`}} kubetail_version={{user `kubetail_version`}} kubelogs_version={{user `kubelogs_version`}}\""
+        "--extra-vars \"minikube_version={{user `minikube_version`}} cridockerd_version={{user `cridockerd_version`}} critools_version={{user `critools_version`}} docker_version={{user `docker_version`}} kubectl_version={{user `kubectl_version`}} helm_version={{user `helm_version`}} kubetail_version={{user `kubetail_version`}} kubelogs_version={{user `kubelogs_version`}}\""
       ]
     },
     {

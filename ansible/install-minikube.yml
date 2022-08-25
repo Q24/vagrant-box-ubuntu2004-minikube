@@ -54,11 +54,76 @@
         path: /etc/sysctl.conf
         line: net.bridge.bridge-nf-call-iptables = 1
 
+    - name: set fs.protected_regular = 0
+      ansible.builtin.lineinfile:
+        path: /etc/sysctl.conf
+        line: fs.protected_regular = 0
+
     - name: apply sysctl config
       ansible.builtin.shell: sysctl -p
 
+    - name: download cri-dockerd version {{ cridockerd_version }} deb
+      ansible.builtin.get_url:
+        url: https://github.com/Mirantis/cri-dockerd/releases/download/v{{ cridockerd_version }}/cri-dockerd_{{ cridockerd_version }}.3-0.ubuntu-focal_amd64.deb
+        dest: /var/tmp/cri-dockerd_{{ cridockerd_version }}.3-0.ubuntu-focal_amd64.deb
+        mode: '0644'
+
+    - name: install cri-dockerd version {{ cridockerd_version }} deb
+      ansible.builtin.apt:
+        deb: /var/tmp/cri-dockerd_{{ cridockerd_version }}.3-0.ubuntu-focal_amd64.deb
+
+    - name: delete cri-dockerd version {{ cridockerd_version }} deb
+      ansible.builtin.file:
+        path: /var/tmp/cri-dockerd_{{ cridockerd_version }}.3-0.ubuntu-focal_amd64.deb
+        state: absent
+
+    - name: start and enable cri-dockerd systemd service
+      ansible.builtin.systemd:
+        daemon_reload: yes
+        name: cri-docker.service
+        state: started
+        enabled: yes
+
+    - name: start and enable cri-dockerd systemd socket
+      ansible.builtin.systemd:
+        name: cri-docker.socket
+        enabled: yes
+
+    - name: add Google ubuntu apt key to system
+      ansible.builtin.apt_key:
+        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+        state: present
+
+    - name: add kubernetes repository
+      ansible.builtin.apt_repository:
+        repo: "deb [arch=amd64] https://apt.kubernetes.io/ kubernetes-xenial main"
+        state: present
+
+    - name: install cri-tools version {{ critools_version }}
+      ansible.builtin.apt:
+        pkg:
+          - cri-tools={{ critools_version }}
+        state: present
+        update_cache: true
+
     - name: start minikube
-      ansible.builtin.shell: minikube start --vm-driver=none
+      ansible.builtin.shell: minikube start --driver=none --cni=bridge
+
+    # TODO Remove this section if this bug ever gets fixed for real: https://github.com/Mirantis/cri-dockerd/pull/99
+    # In file '/etc/systemd/system/cri-docker.service.d/10-cni.conf' '--network-plugin=' should be set to the empty string. Executing 'minikube start' again will overwrite this!
+    - name: set correct network-plugin for cri-docker.service in systemd
+      ansible.builtin.replace:
+        path: /etc/systemd/system/cri-docker.service.d/10-cni.conf
+        regexp: "--network-plugin=cni"
+        replace: "--network-plugin="
+
+    # After modifying the file, restart the cri-docker service for the Kubernetes cluster to start working
+    - name: re-start cri-docker.service after network-plugin modification
+      ansible.builtin.systemd:
+        daemon_reload: yes
+        name: cri-docker.service
+        state: restarted
+    # TODO Ends here
 
     - name: add service-node-port-range parameter to minikube config file
       ansible.builtin.lineinfile:
@@ -77,16 +142,6 @@
       ansible.builtin.file:
         path: /home/vagrant/bin
         state: directory
-
-    - name: add Google ubuntu apt key to system
-      ansible.builtin.apt_key:
-        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
-        state: present
-
-    - name: add kubernetes repository
-      ansible.builtin.apt_repository:
-        repo: "deb [arch=amd64] https://apt.kubernetes.io/ kubernetes-xenial main"
-        state: present
 
     - name: install kubectl version {{ kubectl_version }}
       ansible.builtin.apt:
