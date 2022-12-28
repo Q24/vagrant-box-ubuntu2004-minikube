@@ -1,5 +1,17 @@
 ## Changelog
 
+### 1.3.0-20221228
+* Updated ilionx/ubuntu2004 base box to version 1.2.0-20221228 (with Ubuntu 20.04.5 and Ansible 6.7.0)
+* Updated minikube to version 1.28.0
+* Updated cri-dockerd to version 0.3.0
+* Updated cri-tools to version 1.25.0-00 (required by minikube)
+* Updated Docker to version 20.10.22
+* Updated kubectl to version 1.26.0
+* Updated Helm to version 3.10.3
+* Updated kubetail to version 1.6.17
+* Updated build process to support VirtualBox 7
+* Updated build dependencies: VirtualBox (7.0.4r154605), Packer (1.8.5), Vagrant (2.3.4)
+
 ### 1.2.4-20220825
 * Updated to ilionx/ubuntu2004 base box version 1.1.7-20220825 (with Ansible 6.3.0)
 * Updated minikube to version 1.26.1

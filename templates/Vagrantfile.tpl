@@ -9,6 +9,8 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |vbox|
     vbox.cpus = 2
     vbox.memory = 4096
+    # CLI option --natdnsproxy1 is required for the box to work correctly on VirtualBox 7
+    vbox.customize [ "modifyvm", :id, "--natdnsproxy1", "on" ]
   end
 
   {{ if ne .SyncedFolder "" -}}
