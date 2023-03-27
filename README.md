@@ -1,4 +1,7 @@
 # vagrant-box-ubuntu2004-minikube
+## Archival warning
+**IMPORTANT NOTE**: This project has been archived and will no longer be updated with new box versions. While Ubuntu 20.04 itself is still actively supported, we encourage you to switch to Ubuntu 22.04, using project [vagrant-box-ubuntu2204](https://github.com/Q24/vagrant-box-ubuntu2204). Internally, we've switched all our Vagrant boxes to this version for quite some time already, without any problems.
+
 ## Description
 This project contains everything needed to build the ubuntu2004-minikube vagrant box. The box is build using Vagrant's packer tool. Currently only a box for the VirtualBox provider is built.
 
